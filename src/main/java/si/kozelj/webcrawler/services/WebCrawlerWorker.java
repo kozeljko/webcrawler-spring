@@ -1,13 +1,17 @@
 package si.kozelj.webcrawler.services;
 
 
-import one.util.streamex.StreamEx;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import si.kozelj.webcrawler.models.Page;
 import si.kozelj.webcrawler.repositories.PageRepository;
+import si.kozelj.webcrawler.services.singletons.RobotRulesHandler;
+import si.kozelj.webcrawler.services.singletons.SiteFrontierHandler;
 
 import java.util.UUID;
 
@@ -19,28 +23,42 @@ public class WebCrawlerWorker implements Runnable{
     private PageRepository repository;
 
     @Autowired
-    private WebCrawlerFrontier frontier;
+    private SiteFrontierHandler siteFrontierHandler;
+
+    @Autowired
+    private RobotRulesHandler robotRulesHandler;
 
     @Override
     public void run() {
         String id = UUID.randomUUID().toString();
 
-        System.out.println(frontier == null ? "empty" : "cool");
+        // setup webdriver
+        System.setProperty("webdriver.chrome.driver", "D:\\Libraries\\Documents\\Projects\\webcrawlerSpring\\driver\\chromedriver.exe");
 
-        frontier.addNew(id.charAt(0) + "");
-        frontier.addNew(id.charAt(0) + "");
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1080", "--ignore-certificate-errors");
+        WebDriver webDriver = new ChromeDriver(options);
+
+        webDriver.get("https://podatki.gov.si/robots2.txt");
+
+        Document doc = Jsoup.parse(webDriver.getPageSource(), "https://podatki.gov.si");
 
         while (true) {
-            System.out.println(id + " " + frontier.getNext());
-            frontier.addNew(id.charAt(0) + "");
-            frontier.addNew(id.charAt(0) + "");
-            try {
-                repository.saveAndFlush(new Page());
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                System.out.println("Can't sleep: " + id);
-            }
+            // take url
+
+            // check if has been visited?
+
+            // get robots object (create new one, if doesn't exist
+
+            // get site-map and add new items to queue
+
+            // retrieve content
+
+            // extract urls
+
+            // extract images
+
+            // extract documents
         }
     }
 }
