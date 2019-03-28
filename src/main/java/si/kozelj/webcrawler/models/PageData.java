@@ -10,6 +10,9 @@ public class PageData {
     private int id;
     private byte[] data;
 
+    private Page page;
+    private DataType dataType;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -29,6 +32,26 @@ public class PageData {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "page_id")
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "data_type_code")
+    public DataType getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(DataType dataType) {
+        this.dataType = dataType;
     }
 
     @Override

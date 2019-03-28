@@ -1,5 +1,4 @@
-package com.sample;
-
+package si.kozelj.webcrawler.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,6 @@ import java.util.Objects;
 public class DataType {
 
   private String code;
-
 
   @Id
   @Column(name = "code")

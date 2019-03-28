@@ -2,6 +2,8 @@ package si.kozelj.webcrawler.models;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +14,14 @@ public class Page {
     private Integer httpStatusCode;
     private Timestamp accessedTime;
 
+    private Site site;
+//    private List<PageData> pageData = new ArrayList<>();
+//    private List<Image> images = new ArrayList<>();
+    private PageType pageType;
+
+    private List<Page> fromPages = new ArrayList<>();
+    private List<Page> toPages = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -21,6 +31,65 @@ public class Page {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "site_id")
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
+
+//    @OneToMany (targetEntity = PageData.class)
+//    @JoinColumn(name = "page_id")
+//    public List<PageData> getPageData() {
+//        return pageData;
+//    }
+//
+//    public void setPageData(List<PageData> pageData) {
+//        this.pageData = pageData;
+//    }
+//
+//    @OneToMany
+//    @JoinColumn(name = "page_id")
+//    public List<Image> getImages() {
+//        return images;
+//    }
+//
+//    public void setImages(List<Image> images) {
+//        this.images = images;
+//    }
+
+    @ManyToOne
+    @JoinColumn(name = "page_type_code")
+    public PageType getPageType() {
+        return pageType;
+    }
+
+    public void setPageType(PageType pageType) {
+        this.pageType = pageType;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "link", joinColumns = @JoinColumn(name = "to_page"), inverseJoinColumns = @JoinColumn(name = "from_page"))
+    public List<Page> getFromPages() {
+        return fromPages;
+    }
+
+    public void setFromPages(List<Page> fromPages) {
+        this.fromPages = fromPages;
+    }
+
+    @ManyToMany(mappedBy = "fromPages")
+    public List<Page> getToPages() {
+        return toPages;
+    }
+
+    public void setToPages(List<Page> toPages) {
+        this.toPages = toPages;
     }
 
     @Basic

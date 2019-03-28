@@ -13,6 +13,8 @@ public class Image {
     private byte[] data;
     private Timestamp accessedTime;
 
+    private Page page;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -62,6 +64,16 @@ public class Image {
 
     public void setAccessedTime(Timestamp accessedTime) {
         this.accessedTime = accessedTime;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "page_id")
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
     }
 
     @Override

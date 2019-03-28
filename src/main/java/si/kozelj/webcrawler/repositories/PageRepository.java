@@ -7,4 +7,7 @@ import si.kozelj.webcrawler.models.Page;
 
 @Repository
 public interface PageRepository extends JpaRepository<Page, Long> {
+
+    Page findByUrl(String url);
+
 }

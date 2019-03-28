@@ -1,5 +1,7 @@
 package si.kozelj.webcrawler.services.singletons;
 
+import one.util.streamex.StreamEx;
+
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -7,15 +9,16 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class SiteFrontierHandler {
     private Queue<String> siteQueue = new ConcurrentLinkedDeque<>();
 
-    public String getNext() {
+    public synchronized String getNext() {
         // TODO check if correct method
-        return siteQueue.remove();
+        return siteQueue.poll();
     }
-    public void addNew(String newSite) {
+    public synchronized void addNew(String newSite) {
         siteQueue.add(newSite);
     }
 
-    public void addAll(Collection<String> newSites) {
+    public synchronized void addAll(Collection<String> newSites) {
         siteQueue.addAll(newSites);
+//        siteQueue.addAll(StreamEx.of(newSites).limit(5).toSet());
     }
 }
