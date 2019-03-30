@@ -81,7 +81,7 @@ public class WebCrawlerWorker implements Runnable{
             // TODO do delay
 
             // retrieve content
-            String domainUrl = Util.extractDomainPart(urlObject);
+            String domainUrl = urlObject.getHost();
             String correctedString = Util.prependHttp(urlObject.toString());
             System.out.println(threadID + ": Loading page: " + correctedString);
             webDriver.get(correctedString);

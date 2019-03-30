@@ -33,7 +33,7 @@ public class RobotRulesHandler {
         String domainUrl;
         try {
             URL urlInstance = new URL(Util.prependHttp(url));
-            domainUrl = Util.extractDomainPart(urlInstance);
+            domainUrl = urlInstance.getHost();
             if (robotRulesByUrl.containsKey(domainUrl)) {
                 return robotRulesByUrl.get(domainUrl);
             }
@@ -58,7 +58,12 @@ public class RobotRulesHandler {
         // retrieve source
         WebDriver webDriver = new ChromeDriver(options);
         webDriver.get(targetUrl);
+
+        Site site = new Site();
+        site.setDomain(domainUrl);
+
         String robotsContent = webDriver.getPageSource();
+        site.setRobotsContent(robotsContent);
 
         // try to parse source
         SimpleRobotRules robotRules;
@@ -77,6 +82,8 @@ public class RobotRulesHandler {
             String correctedUrl = Util.prependHttp(sitemapUrl);
             webDriver.get(correctedUrl);
 
+            site.setSitemapContent(webDriver.getPageSource());
+
             SiteMap siteMap;
             try {
                 siteMap = (SiteMap) siteMapParser.parseSiteMap(webDriver.getPageSource().getBytes(), new URL(correctedUrl));
@@ -92,11 +99,7 @@ public class RobotRulesHandler {
         frontierHandler.addAll(candidates);
 
         // create the new site object and add the content
-        Site site = new Site();
-        site.setDomain(domainUrl);
-        site.setRobotsContent(robotsContent);
-        // TODO add sitemap content?
-        site = siteRepository.saveAndFlush(site);
+        siteRepository.saveAndFlush(site);
 
         return robotRules;
     }
