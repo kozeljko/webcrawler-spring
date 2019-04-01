@@ -8,16 +8,14 @@ import java.util.Objects;
 
 @Entity
 public class Page {
-    private int id;
+    private Long id;
     private String url;
     private String htmlContent;
     private Integer httpStatusCode;
     private Timestamp accessedTime;
 
     private Site site;
-//    private List<PageData> pageData = new ArrayList<>();
-//    private List<Image> images = new ArrayList<>();
-    private PageType pageType;
+    private String pageTypeCode;
 
     private List<Page> fromPages = new ArrayList<>();
     private List<Page> toPages = new ArrayList<>();
@@ -25,11 +23,11 @@ public class Page {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,34 +41,13 @@ public class Page {
         this.site = site;
     }
 
-//    @OneToMany (targetEntity = PageData.class)
-//    @JoinColumn(name = "page_id")
-//    public List<PageData> getPageData() {
-//        return pageData;
-//    }
-//
-//    public void setPageData(List<PageData> pageData) {
-//        this.pageData = pageData;
-//    }
-//
-//    @OneToMany
-//    @JoinColumn(name = "page_id")
-//    public List<Image> getImages() {
-//        return images;
-//    }
-//
-//    public void setImages(List<Image> images) {
-//        this.images = images;
-//    }
-
-    @ManyToOne
-    @JoinColumn(name = "page_type_code")
-    public PageType getPageType() {
-        return pageType;
+    @Column(name = "page_type_code")
+    public String getPageTypeCode() {
+        return pageTypeCode;
     }
 
-    public void setPageType(PageType pageType) {
-        this.pageType = pageType;
+    public void setPageTypeCode(String pageType) {
+        this.pageTypeCode = pageType;
     }
 
     @ManyToMany

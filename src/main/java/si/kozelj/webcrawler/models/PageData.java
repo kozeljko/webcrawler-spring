@@ -11,7 +11,7 @@ public class PageData {
     private byte[] data;
 
     private Page page;
-    private DataType dataType;
+    private String dataType;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,13 +44,13 @@ public class PageData {
         this.page = page;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "data_type_code")
-    public DataType getDataType() {
+    @Basic
+    @Column(name = "data_type_code")
+    public String getDataType() {
         return dataType;
     }
 
-    public void setDataType(DataType dataType) {
+    public void setDataType(String dataType) {
         this.dataType = dataType;
     }
 
