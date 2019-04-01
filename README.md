@@ -1,5 +1,10 @@
 # WebCrawler
 
+This is a webcrawler we made for a school project. It takes a few seed sites and runs until it retrieves
+100k pages. 
+
+All source code is available on https://github.com/kozeljko/webcrawler-spring as well.
+
 ### Database start (in Docker)
 
 docker run -d --name webcrawler -e POSTGRES_USERNAME=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=webcrawler -p 5432:5432 postgres:latest
@@ -21,7 +26,7 @@ Required:
  4. Set number of threads (worker.threads.number) in /src/main/resources/application.properties
  5. Set absolute location of chrome driver (driver.location) in /src/main/resources/application.properties
     
-    The provided executables are for Chrome 73. Should you have a newer version of Chrome, visit https://chromedriver.storage.googleapis.com/index.html
+    The drives are located in driver folder. The provided executables are for Chrome 73. Should you have a newer version of Chrome, visit https://chromedriver.storage.googleapis.com/index.html
     and download the correct one.
  6. Build maven project from the root (mvn clean package)
  7. Run the built jar: java -jar target/webcrawler-0.0.1-SNAPSHOT.jar
