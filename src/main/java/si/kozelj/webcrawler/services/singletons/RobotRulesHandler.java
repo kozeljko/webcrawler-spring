@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import si.kozelj.webcrawler.CrawlerConstants;
 import si.kozelj.webcrawler.models.Page;
 import si.kozelj.webcrawler.models.Site;
@@ -34,9 +35,13 @@ public class RobotRulesHandler {
     @Autowired
     private SiteRepository siteRepository;
 
+    @Value("${driver.location}")
+    private String driverLocation;
+
     private final Logger logger = LoggerFactory.getLogger(RobotRulesHandler.class);
 
     public SimpleRobotRules getRobotRules(String url) {
+
         String targetUrl;
         String domainUrl;
         try {
@@ -58,7 +63,7 @@ public class RobotRulesHandler {
     }
 
     private synchronized SimpleRobotRules loadRobotRules(String domainUrl, String targetUrl) {
-        System.setProperty("webdriver.chrome.driver", "D:\\Libraries\\Documents\\Projects\\webcrawlerSpring\\driver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "/home/aljaz/Projects/webcrawler-spring/driver/linux-driver");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1080", "--ignore-certificate-errors");
 

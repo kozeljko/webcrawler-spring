@@ -1,5 +1,6 @@
 package si.kozelj.webcrawler;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -11,6 +12,9 @@ import si.kozelj.webcrawler.services.singletons.SiteFrontierHandler;
 
 @Configuration
 public class AppConfig {
+
+    @Value("${worker.threads.number}")
+    private Integer threadNumber;
 
     @Bean
     @Scope("singleton")
@@ -27,10 +31,10 @@ public class AppConfig {
     @Bean
     public TaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(10);
+        executor.setCorePoolSize(threadNumber);
+        executor.setMaxPoolSize(threadNumber);
         executor.setThreadNamePrefix("worker");
-        executor.setQueueCapacity(210);
+        executor.setQueueCapacity(threadNumber + 200);
         executor.initialize();
 
         return executor;

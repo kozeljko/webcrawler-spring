@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import si.kozelj.webcrawler.CrawlerConstants;
@@ -57,6 +58,9 @@ public class WebCrawlerWorker implements Runnable {
     @Autowired
     private RobotRulesHandler robotRulesHandler;
 
+    @Value("${driver.location}")
+    private String driverLocation;
+
     private final Logger logger = LoggerFactory.getLogger(WebCrawlerWorker.class);
     private final String threadID = UUID.randomUUID().toString();
 
@@ -65,7 +69,7 @@ public class WebCrawlerWorker implements Runnable {
         logger.info("Setting up worker " + threadID);
 
         // setup webdriver
-        System.setProperty("webdriver.chrome.driver", "D:\\Libraries\\Documents\\Projects\\webcrawlerSpring\\driver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", driverLocation);
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1080", "--ignore-certificate-errors");
@@ -122,14 +126,6 @@ public class WebCrawlerWorker implements Runnable {
                     logger.error("Error while saving unallowed page");
                 }
                 continue;
-            }
-
-            // delay
-            long delay = robotRules.getCrawlDelay() > 0 ? robotRules.getCrawlDelay() : 4000L;
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                logger.error("Error while delaying worker.");
             }
 
             // retrieve Page object, if it exists
@@ -215,6 +211,14 @@ public class WebCrawlerWorker implements Runnable {
             // extract images
             handleImages(doc, correctedString, webDriver, pageObject);
 
+            // delay
+            long delay = robotRules.getCrawlDelay() > 0 ? robotRules.getCrawlDelay() : 4000L;
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                logger.error("Error while delaying worker.");
+            }
+
             // if we have 100k pages, don't add more
             if (!frontierHandler.isAddMorePages()) {
                 continue;
@@ -271,8 +275,12 @@ public class WebCrawlerWorker implements Runnable {
                 }
             }
 
-            linkRepository.saveAll(newLinks);
-            linkRepository.flush();
+            try {
+                linkRepository.saveAll(newLinks);
+                linkRepository.flush();
+            } catch (Exception e) {
+                logger.error("Error while saving links.");
+            }
         }
 
         logger.info("Logger " + threadID + " hasn't found any new url to visit");
