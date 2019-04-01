@@ -193,6 +193,8 @@ public class WebCrawlerWorker implements Runnable {
             Document doc;
             try {
                 pageObject.setHtmlContent(webDriver.getPageSource());
+                pageObject = pageRepository.saveAndFlush(pageObject);
+
                 doc = Jsoup.parse(webDriver.getPageSource(), correctedString);
             } catch (Exception e) {
                 logger.error("Error while retrieving and parsing page source: " + correctedString);
