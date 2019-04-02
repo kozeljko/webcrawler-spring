@@ -9,6 +9,14 @@ All source code is available on https://github.com/kozeljko/webcrawler-spring as
 
 docker run -d --name webcrawler -e POSTGRES_USERNAME=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=webcrawler -p 5432:5432 postgres:latest
 
+### Database dump disclaimer
+
+So, like I said, I managed to crawl 100k pages, but forgot to save any content. To fix that, I re-ran the crawler again and parsed 40k pages.
+Even after truncating to the sites we had to include, the dump size was still 350MB+. While attempting to set some of those content 
+to null, I managed to forget the limit query field and I wiped all the html content again. 
+
+I have made a backup before, but I cannot restore it. At this point I give up and will submit the previous dump.
+
 ### Setup guide
 
 Required: 
