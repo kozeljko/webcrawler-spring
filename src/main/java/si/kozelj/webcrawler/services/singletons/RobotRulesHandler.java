@@ -63,7 +63,7 @@ public class RobotRulesHandler {
     }
 
     private synchronized SimpleRobotRules loadRobotRules(String domainUrl, String targetUrl) {
-        System.setProperty("webdriver.chrome.driver", "/home/aljaz/Projects/webcrawler-spring/driver/linux-driver");
+        System.setProperty("webdriver.chrome.driver", driverLocation);
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1080", "--ignore-certificate-errors");
 
